@@ -25,9 +25,9 @@ class ImageFiles(models.Model):
     latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
-    Organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
+    organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
     upload_by = models.CharField(max_length=255)
-    view_permission = models.ManyToManyField(User)
+    view_permission = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.name
@@ -44,9 +44,9 @@ class VideoFiles(models.Model):
     latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
-    Organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
+    organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
     upload_by = models.CharField(max_length=255)
-    view_permission = models.ManyToManyField(User)
+    view_permission = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.name
@@ -63,8 +63,8 @@ class FileGroups(models.Model):
     image_files = models.ManyToManyField(ImageFiles, blank=True)
     video_files = models.ManyToManyField(VideoFiles, blank=True)
     name = models.CharField(max_length=100)
-    Organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
-    view_permission = models.ManyToManyField(User)
+    organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
+    view_permission = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.name

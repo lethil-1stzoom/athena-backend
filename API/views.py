@@ -1,5 +1,4 @@
 import json
-from urllib import response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.authentication import TokenAuthentication
@@ -65,6 +64,7 @@ def image_api(request):
                 name=name,
                 file=file,
                 upload_by=user.email,
+                organisation=organisation,
             )
             if description != '':
                 image.description = description
@@ -109,6 +109,7 @@ def video_api(request):
                 name=name,
                 file=file,
                 upload_by=user.email,
+                organisation=organisation,
             )
             if description != '':
                 video.description = description
@@ -154,7 +155,8 @@ def group_api(request):
                 group = FileGroups.objects.create(
                     name=name,
                     description=description,
-                    created_by=user.email
+                    created_by=user.email,
+                    organisation=organisation,
                 )
                 if images != '':
                     for id in images:
