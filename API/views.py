@@ -285,7 +285,7 @@ def users(request):
     user = request.user
     organisation = user.organisation
     if request.method == 'GET':
-        usr = organisation.users_set.exclude(email=user.email)
+        usr = organisation.users.exclude(email=user.email)
         data = UserSerializer(usr, many=True).data
         return Response(data)
     

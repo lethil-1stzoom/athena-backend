@@ -1,4 +1,5 @@
 .env
+api_docs
 db.sqlite3
 media
 .env/
