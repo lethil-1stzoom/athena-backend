@@ -1,0 +1,11 @@
+asgiref==3.5.2
+Django==4.0.5
+django-cors-headers==3.13.0
+django-environ==0.8.1
+django-unixtimestampfield==0.5.0
+djangorestframework==3.13.1
+Pillow==9.1.1
+pytz==2022.1
+six==1.16.0
+sqlparse==0.4.2
+whitenoise==6.2.0
