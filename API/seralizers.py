@@ -26,7 +26,7 @@ class ImageFilesSerializers(serializers.ModelSerializer):
 class VideoFilesSerializers(serializers.ModelSerializer):
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url']
+        fields = ['id', 'created_at', 'description', 'image', 'latitude', 'longitude', 'name', 'upload_by', 'url']
 
 
 
@@ -58,7 +58,7 @@ class BossVideoFilesSerializers(serializers.ModelSerializer):
     in_group = FileGroupsSerializers(many=True, read_only=True)
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission', 'in_group']
+        fields = ['id', 'created_at', 'description', 'image', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission', 'in_group']
 
 class UniqueUrlSerializers(serializers.ModelSerializer):
     class Meta:

@@ -18,6 +18,9 @@ def image_path(instance, filename):
 def video_path(instance, filename):
     return 'file/video/{0}/{1}'.format(instance.id, filename)
 
+def thumbnail_path(instance, filename):
+    return 'file/video/{0}/thumbnail/{1}'.format(instance.id, filename)
+
 
 def set_url():
 	url = ''.join(random.choices(string.ascii_lowercase + string.digits, k=250))
@@ -53,6 +56,7 @@ class VideoFiles(models.Model):
     created_at_numeric = UnixTimeStampField(use_numeric=True, default=timezone.now)
     description = models.CharField(max_length=255, blank=True, null=True)
     file = models.FileField(upload_to=video_path)
+    image = models.ImageField(upload_to=thumbnail_path, blank=True, null=True)
     latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
@@ -66,8 +70,14 @@ class VideoFiles(models.Model):
     def url(self):
         return self.file.url
     
+    def thumbnail(self):
+        if self.image:
+            return self.image.url
+    
     def in_group(self):
         return self.groups.all()
+
+
 
 class FileGroups(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

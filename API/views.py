@@ -142,7 +142,7 @@ def video_api(request):
                 video.view_permission.add(user)
                 data = VideoFilesSerializers(video).data
             else:
-                data = BossVideoFilesSerializers(video, many=True).data
+                data = BossVideoFilesSerializers(video).data
             return Response(data)
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -332,7 +332,7 @@ def users(request):
                 user.save()
                 data = UserSerializer(user).data
                 return Response(data)
-        return Response({"message": ""})
+        return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 @api_view(['DELETE'])

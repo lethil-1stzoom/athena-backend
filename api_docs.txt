@@ -9,13 +9,13 @@
             "user": {
                 "id": "8db7c6d2-3681-41d9-b2f6-7cbdbfba5355",
                 "email": "user1@email.com",
-                "first_name": "User",
-                "last_name": "1",
+                "name": "User",
                 "is_exec": true,
                 "organisation": {
                     "id": "dd486a30-ab85-4d22-882a-953ff960d5e3",
                     "name": "Organisation 1"
                 },
+                "created_at": "2022-06-08T06:56:57.789729Z",
                 "token": "493998d47e2471781b5d3052b244621d2e77f8f4"
             }
         }
@@ -193,8 +193,7 @@
         email-string
         password1-string
         password2-string
-        first_name-string
-        last_name-string
+        name-string
         is_exec-Boolean
     Response GET:
         List of all User objects
@@ -216,8 +215,7 @@
         password-string
         password1-string
         password2-string
-        first_name-string
-        last_name-string
+        name-string
         is_exec-Boolean
     
     Response:
