@@ -171,7 +171,7 @@ MEDIA_ROOT =  BASE_DIR / "media"
 MEDIA_URL = '/media/'
 
 if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'HappiestPlace.custom_azure.AzureMediaStorage'
+    DEFAULT_FILE_STORAGE = 'Athena.custom_azure.AzureMediaStorage'
     AZURE_ACCOUNT_NAME = "hpstore01"
     MEDIA_LOCATION = "files"
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
