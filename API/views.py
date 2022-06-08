@@ -319,14 +319,13 @@ def users(request):
         password1 = data.get('password1', '')
         password2 = data.get('password2', '')
         first_name = data.get('name', '')
-        is_exc = data.get('is_exc', '')
-
+        is_exec = data.get('is_exec', '')
         if email != '' and first_name != '' and is_exc != '':
             if password1 == password2 and password1 != '':
                 user = User.objects.create(
                     email=email,
                     first_name=first_name,
-                    is_exc=is_exc
+                    is_exec=is_exec
                 )
                 user.set_password(password1)
                 user.save()
