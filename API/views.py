@@ -360,7 +360,7 @@ def edit_info(request):
         password = data.get('password', '')
         email = data.get('email', '')
         first_name = data.get('name', '')
-        is_exc = data.get('is_exc', '')
+        is_exec = data.get('is_exec', '')
 
         user = authenticate(email=email, password=password)
         if user is not None:
@@ -368,8 +368,8 @@ def edit_info(request):
                 user.set_password(password1)
             if first_name != '':
                 user.first_name = first_name
-            if is_exc != '':
-                user.is_exc = is_exc
+            if is_exec != '':
+                user.is_exec = is_exec
             user.save()
 
     if request.method == 'DELETE':
