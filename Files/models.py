@@ -34,6 +34,9 @@ class ImageFiles(models.Model):
     
     def url(self):
         return self.file.url
+    
+    def in_group(self):
+        return self.groups.all()
 
 class VideoFiles(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -53,6 +56,9 @@ class VideoFiles(models.Model):
     
     def url(self):
         return self.file.url
+    
+    def in_group(self):
+        return self.groups.all()
 
 class FileGroups(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -60,8 +66,8 @@ class FileGroups(models.Model):
     created_at_numeric = UnixTimeStampField(use_numeric=True, default=timezone.now)
     created_by = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    image_files = models.ManyToManyField(ImageFiles, blank=True)
-    video_files = models.ManyToManyField(VideoFiles, blank=True)
+    image_files = models.ManyToManyField(ImageFiles, blank=True, related_name="groups")
+    video_files = models.ManyToManyField(VideoFiles, blank=True, related_name="groups")
     name = models.CharField(max_length=100)
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
     view_permission = models.ManyToManyField(User, blank=True)

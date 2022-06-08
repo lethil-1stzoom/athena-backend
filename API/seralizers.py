@@ -29,19 +29,6 @@ class VideoFilesSerializers(serializers.ModelSerializer):
 
 
 
-class BossImageFilesSerializers(serializers.ModelSerializer):
-    view_permission = UserSerializer(many=True, read_only=True)
-    class Meta:
-        model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission']
-
-class BossVideoFilesSerializers(serializers.ModelSerializer):
-    view_permission = UserSerializer(many=True, read_only=True)
-    class Meta:
-        model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission']
-
-
 
 class FileGroupsSerializers(serializers.ModelSerializer):
     image_files = ImageFilesSerializers(many=True, read_only=True)
@@ -50,3 +37,25 @@ class FileGroupsSerializers(serializers.ModelSerializer):
     class Meta:
         model = FileGroups
         fields = ['id', 'created_at', 'created_by', 'description', 'image_files', 'video_files', 'name', 'view_permission']
+
+
+class BossFileGroupSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = FileGroups
+        fields = ['id', 'name', 'description']
+
+
+class BossImageFilesSerializers(serializers.ModelSerializer):
+    view_permission = UserSerializer(many=True, read_only=True)
+    in_group = BossFileGroupSerializers(many=True, read_only=True)
+    class Meta:
+        model = ImageFiles
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission', 'in_group']
+
+class BossVideoFilesSerializers(serializers.ModelSerializer):
+    view_permission = UserSerializer(many=True, read_only=True)
+    in_group = FileGroupsSerializers(many=True, read_only=True)
+    class Meta:
+        model = VideoFiles
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission', 'in_group']
+

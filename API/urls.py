@@ -5,6 +5,7 @@ from .views import *
 urlpatterns = [
     path('auth/', include('rest_framework.urls')),
     path('login/', login),
+    path('validate/', validate),
     path('image/', image_api),
     path('video/', video_api),
     path('group/', group_api),

@@ -1,0 +1,241 @@
+1)
+    Endpoint: http://20.118.129.118/api/v0/login/
+    Method: POST
+    Data:
+        email-string
+        password-string
+    Response:
+        {
+            "user": {
+                "id": "8db7c6d2-3681-41d9-b2f6-7cbdbfba5355",
+                "email": "user1@email.com",
+                "first_name": "User",
+                "last_name": "1",
+                "is_exec": true,
+                "organisation": {
+                    "id": "dd486a30-ab85-4d22-882a-953ff960d5e3",
+                    "name": "Organisation 1"
+                },
+                "token": "493998d47e2471781b5d3052b244621d2e77f8f4"
+            }
+        }
+2)
+    Endpoint: http://20.118.129.118/api/v0/image/
+    Method: GET, POST
+    Data:
+        name-string
+        description-string
+        file-image
+        latitude-decimal[ optional ]
+        longitude-decimal[ optional ]
+        group-uuid[ optional ]
+    Response GET:
+        [
+            {
+                "id": "16e3f329-8a67-4574-8de8-901da12605a2",
+                "created_at": "2022-06-07T09:09:24.609900Z",
+                "description": "This is a test Image",
+                "latitude": null,
+                "longitude": null,
+                "name": "Image1",
+                "upload_by": "user1@email.com",
+                "url": "/media/file/image/16e3f329-8a67-4574-8de8-901da12605a2/img.jpeg",
+                "view_permission": [] // field will not be included for non executive users
+            }
+        ]
+    Response POST:
+    {
+        "id": "16e3f329-8a67-4574-8de8-901da12605a2",
+        "created_at": "2022-06-07T09:09:24.609900Z",
+        "description": "This is a test Image",
+        "latitude": null,
+        "longitude": null,
+        "name": "Image1",
+        "upload_by": "user1@email.com",
+        "url": "/media/file/image/16e3f329-8a67-4574-8de8-901da12605a2/img.jpeg",
+        "view_permission": [] // field will not be included for non executive users
+    }
+
+3)
+    Endpoint: http://20.118.129.118/api/v0/video/
+    Method: GET, POST
+    Data:
+        name-string
+        description-string
+        file-video
+        latitude-decimal[ optional ]
+        longitude-decimal[ optional ]
+        group-uuid[ optional ]
+    Response GET:
+        [
+            {
+                "id": "16e3f329-8a67-4574-8de8-901da12605a2",
+                "created_at": "2022-06-07T09:09:24.609900Z",
+                "description": "This is a test Image",
+                "latitude": null,
+                "longitude": null,
+                "name": "Image1",
+                "upload_by": "user1@email.com",
+                "url": "/media/file/image/16e3f329-8a67-4574-8de8-901da12605a2/img.jpeg",
+                "view_permission": [] // field will not be included for non executive users
+            }
+        ]
+    Response POST:
+    {
+        "id": "16e3f329-8a67-4574-8de8-901da12605a2",
+        "created_at": "2022-06-07T09:09:24.609900Z",
+        "description": "This is a test Image",
+        "latitude": null,
+        "longitude": null,
+        "name": "Image1",
+        "upload_by": "user1@email.com",
+        "url": "/media/file/image/16e3f329-8a67-4574-8de8-901da12605a2/img.jpeg",
+        "view_permission": [] // field will not be included for non executive users
+    }
+
+4)
+    Endpoint: http://20.118.129.118/api/v0/group/
+    Method: GET, POST // Only the is_exec User can POST
+    Data:
+        name-string
+        description-string
+        image_files - list of image id
+        video_files - list of video id
+        view_permission - list of non is_exec user id // who can view the group
+    Response GET:
+        [
+            {
+                "id": "fcc23456-92ff-42f9-b5d3-9797f15772b6",
+                "created_at": "2022-06-07T09:44:46.903210Z",
+                "created_by": "user1@email.com",
+                "description": "This is a test Group",
+                "image_files": [
+                    {
+                        "id": "16e3f329-8a67-4574-8de8-901da12605a2",
+                        "created_at": "2022-06-07T09:09:24.609900Z",
+                        "description": "This is a test Image",
+                        "latitude": null,
+                        "longitude": null,
+                        "name": "Image1",
+                        "upload_by": "user1@email.com",
+                        "url": "/media/file/image/16e3f329-8a67-4574-8de8-901da12605a2/img.jpeg"
+                    }
+                ],
+                "video_files": [],
+                "name": "Group 1",
+                "view_permission": [
+                    {
+                        "id": "3b360bf6-47de-4053-8805-a5bae1b83bbb",
+                        "email": "user2@email.com",
+                        "first_name": "User",
+                        "last_name": "2",
+                        "is_exec": false,
+                        "organisation": {
+                            "id": "dd486a30-ab85-4d22-882a-953ff960d5e3",
+                            "name": "Organisation 1"
+                        }
+                    }
+                ]
+            }
+        ]
+    Response POST:
+    {
+        "id": "fcc23456-92ff-42f9-b5d3-9797f15772b6",
+        "created_at": "2022-06-07T09:44:46.903210Z",
+        "created_by": "user1@email.com",
+        "description": "This is a test Group",
+        "image_files": [
+            {
+                "id": "16e3f329-8a67-4574-8de8-901da12605a2",
+                "created_at": "2022-06-07T09:09:24.609900Z",
+                "description": "This is a test Image",
+                "latitude": null,
+                "longitude": null,
+                "name": "Image1",
+                "upload_by": "user1@email.com",
+                "url": "/media/file/image/16e3f329-8a67-4574-8de8-901da12605a2/img.jpeg"
+            }
+        ],
+        "video_files": [],
+        "name": "Group 1",
+        "view_permission": [
+            {
+                "id": "3b360bf6-47de-4053-8805-a5bae1b83bbb",
+                "email": "user2@email.com",
+                "first_name": "User",
+                "last_name": "2",
+                "is_exec": false,
+                "organisation": {
+                    "id": "dd486a30-ab85-4d22-882a-953ff960d5e3",
+                    "name": "Organisation 1"
+                }
+            }
+        ]
+    }
+
+5)
+    Endpoint: http://20.118.129.118/api/v0/image/<uuid:id>/
+    Endpoint: http://20.118.129.118/api/v0/group/<uuid:id>/
+    Endpoint: http://20.118.129.118/api/v0/video/<uuid:id>/
+    Method: DELETE, PATCH // Only for the is_exec User
+    Data:
+        Any data on the POST objects
+    Response PATCH:
+        The updated object
+    
+    Response DELETE:
+    {"message": "Deleted Successfully"}
+
+6)
+    Endpoint: http://20.118.129.118/api/v0/users/
+    Method: GET, POST // Only for the is_exec user
+    Data:
+        email-string
+        password1-string
+        password2-string
+        first_name-string
+        last_name-string
+        is_exec-Boolean
+    Response GET:
+        List of all User objects
+    
+    Response POST:
+        Created User Object
+
+
+7)  
+    Endpoint: http://20.118.129.118/api/v0/users/<uuid:id>
+    Method: DELETE
+
+
+8)
+    Endpoint: http://20.118.129.118/api/v0/edit/user/
+    Method: DELETE, PATCH
+    Data:
+        email-string
+        password-string
+        password1-string
+        password2-string
+        first_name-string
+        last_name-string
+        is_exec-Boolean
+    
+    Response:
+        User Object
+
+9)
+    Endpoint: http://20.118.129.118/api/v0/edit/validate/
+    Method: GET
+    Response:
+        {
+            "id": "4137cc18-6e3e-47d3-982d-23af3af1e7d4",
+            "email": "exec@email.com",
+            "first_name": "Exec",
+            "last_name": "1",
+            "is_exec": true,
+            "organisation": {
+                "id": "91fe3b72-359e-48f3-8964-24cdbe94131f",
+                "name": "Organisation 1"
+            },
+            "validated": true
+        }

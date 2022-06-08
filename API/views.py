@@ -35,6 +35,17 @@ def login(request):
             return response
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def validate(request):
+    user = request.user
+    if request.method == 'GET':
+        data = UserSerializer(user).data
+        data['validated'] = True
+        return Response(data)
+
 @api_view(['GET', 'POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -59,6 +70,7 @@ def image_api(request):
         file = data.get('file', '')
         latitude = data.get('latitude', '')
         longitude = data.get('longitude', '')
+        group_id = data.get('group', '')
         if name != '' and file != '':
             image = ImageFiles.objects.create(
                 name=name,
@@ -72,6 +84,10 @@ def image_api(request):
                 image.latitude = latitude
                 image.longitude = longitude
             image.save()
+            if group_id != '':
+                group = get_object_or_404(FileGroups, id=group_id)
+                group.image_files.add(image)
+                group.save()
             if not user.is_exec:
                 image.view_permission.add(user)
                 data = ImageFilesSerializers(image).data
@@ -104,6 +120,7 @@ def video_api(request):
         file = data.get('file', '')
         latitude = data.get('latitude', '')
         longitude = data.get('longitude', '')
+        group_id = data.get('group', '')
         if name != '' and file != '':
             video = VideoFiles.objects.create(
                 name=name,
@@ -117,6 +134,10 @@ def video_api(request):
                 video.latitude = latitude
                 video.longitude = longitude
             video.save()
+            if group_id != '':
+                group = get_object_or_404(FileGroups, id=group_id)
+                group.video_files.add(video)
+                group.save()
             if not user.is_exec:
                 video.view_permission.add(user)
                 data = VideoFilesSerializers(video).data
