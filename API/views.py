@@ -391,9 +391,9 @@ def share(request):
                 url.append(u)
         data = UniqueUrlSerializers(url, many=True).data
         for d in data:
-            temp = get_object_or_404(UniqueURL, token=d.get('token', ''))
+            temp = get_object_or_404(UniqueURL, token=d['token'])
             d["file"] = get_object_by_type(temp)
-        return Response(d)
+        return Response(data)
     
     if request.method == 'POST':
         if isinstance(request.data, str):

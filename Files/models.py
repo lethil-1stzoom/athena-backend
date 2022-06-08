@@ -21,7 +21,7 @@ def video_path(instance, filename):
 
 def set_url():
 	url = ''.join(random.choices(string.ascii_lowercase + string.digits, k=250))
-	while url in [n.url for n in UniqueURL.objects.all()]:
+	while url in [n.token for n in UniqueURL.objects.all()]:
 		url = ''.join(random.choices(string.ascii_lowercase + string.digits, k=250))
 	return url
 

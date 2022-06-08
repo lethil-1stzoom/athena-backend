@@ -239,3 +239,72 @@
             },
             "validated": true
         }
+
+10)
+    Endpoint: http://20.118.129.118/api/v0/edit/share/
+    Method: GET, POST // Only for is_exec user
+    Data:
+        expired_hrs-int[optional, default=24]
+        info-string
+        obj_id-uuid // file or group to share
+        type-string[image, video, group] // type of object to share
+    
+    Response GET:
+        [
+            {
+                "id": "6256e912-ba90-4ba8-bb4a-7526105cf9e2",
+                "created_at": "2022-06-08T06:41:21.319536Z",
+                "created_by": "exec@email.com",
+                "expired_hrs": 12,
+                "info": "Share 1",
+                "token": "rdwjxai6hu9v008kbbn89d70bayqh8dno84yifg11dlzwiac3f5ypjfaz8hxs1h2zbqal1ckv7ewrb4ugv661ralfkw0ydoysmwnon1rqslue7kgh4wcwln3ajjai3hw6qs1dqjgaijvlqoc64p96ph5a4skhh5xo9gzb3t57bryvkmlou7aqwhs4xtcxvlnz15w8eorpjil6s8nnu7r5erwslaajb11awlo3xfxiyvvzbyelxggmz9bb1",
+                "type": "image",
+                "visited": 0,
+                "file": {
+                    "id": "d25a5b7f-3565-415c-8b0b-79541b3dcb51",
+                    "created_at": "2022-06-06T09:17:14.595090Z",
+                    "description": null,
+                    "latitude": null,
+                    "longitude": null,
+                    "name": "Abstract Image",
+                    "upload_by": "test@email.com",
+                    "url": "/media/file/image/d25a5b7f-3565-415c-8b0b-79541b3dcb51/img.jpeg"
+                }
+            }
+        ]
+    Response POST:
+        {
+            "id": "405158ae-ae9c-4b70-9617-1f113c143679",
+            "created_at": "2022-06-08T07:06:12.004399Z",
+            "created_by": "exec@email.com",
+            "expired_hrs": 24,
+            "info": "Share 2",
+            "token": "nh6duowqiddr66hjzom7ws76vo9b0l8y13jlpz43alnohww2u7i1wh06lnry9sexin3f9l20hohhfnzv5n93stl3c7ztpewgfbwd53ucv1cicgnoiih3laty4mneyphd4uy46a1ti0ol6t67q7gs0spm552qvilukorw5gvuwp2vxg9ck57w6r1tw5sev8ny6vzvj4vyf862hzxfapv96c96o9rnr2oaviy0cy407dvyigu98zs33g0lx6",
+            "type": "image",
+            "visited": 0,
+            "file": {
+                "id": "d25a5b7f-3565-415c-8b0b-79541b3dcb51",
+                "created_at": "2022-06-06T09:17:14.595090Z",
+                "description": null,
+                "latitude": null,
+                "longitude": null,
+                "name": "Abstract Image",
+                "upload_by": "test@email.com",
+                "url": "/media/file/image/d25a5b7f-3565-415c-8b0b-79541b3dcb51/img.jpeg"
+            }
+        }
+
+11)
+    Endpoint: http://20.118.129.118/api/v0/edit/share/<uuid:id>/
+    Method: DELETE, PATCH // Only for is_exec user
+    Data:
+        expired_hrs-int
+        info-string
+    Response PATCH:
+        share object
+
+12)
+    Endpoint: http://20.118.129.118/api/v0/temp/file/<str:token>/    // token from the shared object
+    Method: GET // Accessible to anyone
+    Data:
+        Object of the file or group shared,
