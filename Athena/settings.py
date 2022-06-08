@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'storages',
 
     'API',
     'Files',
@@ -168,6 +169,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT =  BASE_DIR / "media"
 MEDIA_URL = '/media/'
+
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'HappiestPlace.custom_azure.AzureMediaStorage'
+    AZURE_ACCOUNT_NAME = "hpstore01"
+    MEDIA_LOCATION = "files"
+    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
