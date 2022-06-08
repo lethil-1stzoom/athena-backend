@@ -320,7 +320,7 @@ def users(request):
         password2 = data.get('password2', '')
         first_name = data.get('name', '')
         is_exec = data.get('is_exec', '')
-        if email != '' and first_name != '' and is_exc != '':
+        if email != '' and first_name != '' and is_exec != '':
             if password1 == password2 and password1 != '':
                 user = User.objects.create(
                     email=email,
