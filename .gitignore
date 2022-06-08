@@ -5,3 +5,4 @@ media
 .env/
 **/migrations/**
 **/__pycache__/**
+**/custom_azure.py
