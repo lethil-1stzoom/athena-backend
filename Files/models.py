@@ -44,9 +44,6 @@ class ImageFiles(models.Model):
     def __str__(self):
         return self.name
     
-    def url(self):
-        return self.file.url
-    
     def in_group(self):
         return self.groups.all()
 
@@ -56,7 +53,7 @@ class VideoFiles(models.Model):
     created_at_numeric = UnixTimeStampField(use_numeric=True, default=timezone.now)
     description = models.CharField(max_length=255, blank=True, null=True)
     file = models.FileField(upload_to=video_path)
-    image = models.ImageField(upload_to=thumbnail_path, blank=True, null=True)
+    thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True, null=True)
     latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
@@ -66,13 +63,6 @@ class VideoFiles(models.Model):
 
     def __str__(self):
         return self.name
-    
-    def url(self):
-        return self.file.url
-    
-    def thumbnail(self):
-        if self.image:
-            return self.image.url
     
     def in_group(self):
         return self.groups.all()

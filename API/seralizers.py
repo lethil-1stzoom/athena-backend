@@ -19,14 +19,23 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'name', 'is_exec', 'organisation', 'created_at']
 
 class ImageFilesSerializers(serializers.ModelSerializer):
+    file = serializers.ImageField(
+        max_length=None, use_url=True
+    )
     class Meta:
         model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file']
 
 class VideoFilesSerializers(serializers.ModelSerializer):
+    thumbnail = serializers.ImageField(
+        max_length=None, use_url=True
+    )
+    file = serializers.FileField(
+        max_length=None, use_url=True
+    )
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'image', 'latitude', 'longitude', 'name', 'upload_by', 'url']
+        fields = ['id', 'created_at', 'description', 'image', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail']
 
 
 
@@ -49,16 +58,25 @@ class BossFileGroupSerializers(serializers.ModelSerializer):
 class BossImageFilesSerializers(serializers.ModelSerializer):
     view_permission = UserSerializer(many=True, read_only=True)
     in_group = BossFileGroupSerializers(many=True, read_only=True)
+    file = serializers.ImageField(
+        max_length=None, use_url=True
+    )
     class Meta:
         model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission', 'in_group']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'view_permission', 'in_group']
 
 class BossVideoFilesSerializers(serializers.ModelSerializer):
     view_permission = UserSerializer(many=True, read_only=True)
     in_group = FileGroupsSerializers(many=True, read_only=True)
+    thumbnail = serializers.ImageField(
+        max_length=None, use_url=True
+    )
+    file = serializers.FileField(
+        max_length=None, use_url=True
+    )
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'image', 'latitude', 'longitude', 'name', 'upload_by', 'url', 'view_permission', 'in_group']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail', 'view_permission', 'in_group']
 
 class UniqueUrlSerializers(serializers.ModelSerializer):
     class Meta:

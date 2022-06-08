@@ -325,7 +325,8 @@ def users(request):
                 user = User.objects.create(
                     email=email,
                     first_name=first_name,
-                    is_exec=is_exec
+                    is_exec=is_exec,
+                    organisation=organisation,
                 )
                 user.set_password(password1)
                 user.save()
