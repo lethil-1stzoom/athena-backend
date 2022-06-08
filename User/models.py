@@ -3,7 +3,8 @@ import uuid
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-
+from django.utils import timezone
+from unixtimestampfield.fields import UnixTimeStampField
 
 
 class CustomUserManager(BaseUserManager):
@@ -47,6 +48,7 @@ class Organisation(models.Model):
 class CustomUser(AbstractUser):
 	username = None
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	created_at = models.DateTimeField(auto_now_add=True)
 	email = models.EmailField(_('email address'), unique=True)
 	is_exec = models.BooleanField(default=False)
 	organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True, related_name="users")
@@ -58,5 +60,8 @@ class CustomUser(AbstractUser):
 	
 	def __str__(self):
 		return self.email
+	
+	def name(self):
+		return self.first_name
 
 

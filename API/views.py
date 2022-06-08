@@ -318,16 +318,14 @@ def users(request):
         email = data.get('email', '')
         password1 = data.get('password1', '')
         password2 = data.get('password2', '')
-        first_name = data.get('first_name', '')
-        last_name = data.get('last_name', '')
+        first_name = data.get('name', '')
         is_exc = data.get('is_exc', '')
 
-        if email != '' and first_name != '' and last_name != '' and is_exc != '':
+        if email != '' and first_name != '' and is_exc != '':
             if password1 == password2 and password1 != '':
                 user = User.objects.create(
                     email=email,
                     first_name=first_name,
-                    last_name=last_name,
                     is_exc=is_exc
                 )
                 user.set_password(password1)
@@ -346,7 +344,7 @@ def users_edit(request, id):
 
     if request.method == 'DELETE':
         user.delete()
-        return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        return Response({"message": "Deleted Successfully"})
 
 @api_view(['DELETE', 'PATCH'])
 @authentication_classes([TokenAuthentication])
@@ -361,8 +359,7 @@ def edit_info(request):
         password2 = data.get('password2', '')
         password = data.get('password', '')
         email = data.get('email', '')
-        first_name = data.get('first_name', '')
-        last_name = data.get('last_name', '')
+        first_name = data.get('name', '')
         is_exc = data.get('is_exc', '')
 
         user = authenticate(email=email, password=password)
@@ -371,8 +368,6 @@ def edit_info(request):
                 user.set_password(password1)
             if first_name != '':
                 user.first_name = first_name
-            if last_name != '':
-                user.last_name = last_name
             if is_exc != '':
                 user.is_exc = is_exc
             user.save()
@@ -380,3 +375,81 @@ def edit_info(request):
     if request.method == 'DELETE':
         user.delete()
         return Response({"message": "Delete Successfully"})
+
+
+@api_view(['GET', 'POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@is_exec
+def share(request):
+    user = request.user
+    if request.method == 'GET':
+        url = []
+        l = UniqueURL.objects.all()
+        for u in l:
+            if u.is_valid():
+                url.append(u)
+        data = UniqueUrlSerializers(url, many=True).data
+        for d in data:
+            temp = get_object_or_404(UniqueURL, token=d.get('token', ''))
+            d["file"] = get_object_by_type(temp)
+        return Response(d)
+    
+    if request.method == 'POST':
+        if isinstance(request.data, str):
+            data = json.loads(request.data)
+        else:
+            data = request.data
+        expired_hrs = data.get("expired_hrs", "")
+        info = data.get("info", "")
+        obj_id = data.get("obj_id", "")
+        type = data.get("type", "")
+        if info != "" and obj_id != "" and type != "":
+            url = UniqueURL.objects.create(
+                info=info,
+                obj_id=obj_id,
+                type=type,
+                created_by=user.email
+            )
+            if expired_hrs != "":
+                url.expired_hrs = int(expired_hrs)
+            url.save()
+            data = UniqueUrlSerializers(url).data
+            return Response(data)
+
+@api_view(['DELETE', 'PATCH'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@is_exec
+def share_edit(request, id):
+    url = get_object_or_404(UniqueURL, id=id)
+    if request.method == 'PATCH':
+        if isinstance(request.data, str):
+            data = json.loads(request.data)
+        else:
+            data = request.data
+        expired_hrs = data.get("expired_hrs", "")
+        info = data.get("info", "")
+        if expired_hrs != '':
+            url.expired_hrs = expired_hrs
+        if info != '':
+            url.info = info
+        url.save()
+        data = UniqueUrlSerializers(data).data
+        return Response(data)
+    if request.method == 'DELETE':
+        url.delete()
+        return Response({"message": "Deleted Successfully"})
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes((permissions.AllowAny, ))
+def get_from_share(requesr, token):
+    url = get_object_or_404(UniqueURL, token=token)
+    if url.is_valid():
+        data = get_object_by_type(url)
+        url.visited += 1
+        url.save()
+        return Response(data)
+    return Response({"message": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
+            

@@ -15,4 +15,7 @@ urlpatterns = [
     path('users/', users),
     path('users/<uuid:id>', users_edit),
     path('edit/user/', edit_info),
+    path('share/', share),
+    path('share/<uuid:id>/', share_edit),
+    path('temp/file/<str:token>/', get_from_share),
     ]

@@ -1,6 +1,8 @@
-from re import L
+import random, string
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from unixtimestampfield.fields import UnixTimeStampField
@@ -15,6 +17,13 @@ def image_path(instance, filename):
 
 def video_path(instance, filename):
     return 'file/video/{0}/{1}'.format(instance.id, filename)
+
+
+def set_url():
+	url = ''.join(random.choices(string.ascii_lowercase + string.digits, k=250))
+	while url in [n.url for n in UniqueURL.objects.all()]:
+		url = ''.join(random.choices(string.ascii_lowercase + string.digits, k=250))
+	return url
 
 class ImageFiles(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -74,3 +83,35 @@ class FileGroups(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UniqueURL(models.Model):
+    TYPE = (
+        ("image", "image"),
+        ("video", "video"),
+        ("group", "group")
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.CharField(max_length=200)
+    expired_hrs = models.IntegerField(default=24)
+    info = models.CharField(max_length=255, null=True, blank=True)
+    obj_id = models.CharField(max_length=250)
+    token = models.CharField(max_length=255, default=set_url)
+    type = models.CharField(max_length=200, choices=TYPE)
+    visited = models.IntegerField(default=0)
+
+    def get_object(self):
+        if self.type == "image":
+            return get_object_or_404(ImageFiles, id=self.obj_id)
+        if self.type == "video":
+            return get_object_or_404(VideoFiles, id=self.obj_id)
+        if self.type == "group":
+            return get_object_or_404(FileGroups, id=self.obj_id)
+    
+    def is_valid(self):
+        if timezone.now() < self.created_at + timedelta(hours=self.expired_hrs):
+            return True
+        self.delete()
+        return False
+    
