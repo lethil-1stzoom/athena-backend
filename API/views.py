@@ -209,10 +209,13 @@ def all_files(request):
     if request.method == 'GET':
         image = user.imagefiles_set.all()
         video = user.videofiles_set.all()
+        image_data = ImageFilesSerializers(image, many=True).data
+        video_data = VideoFilesSerializers(video, many=True).data
+        vid_img_data = image_data + video_data
+        vid_img_data.sort(key=lambda x: x['created_at'], reverse=True)
         group = user.filegroups_set.all()
         data = {}
-        data["image"] = ImageFilesSerializers(image, many=True).data
-        data["video"] = VideoFilesSerializers(video, many=True).data
+        data['files'] = vid_img_data
         data["group"] = FileGroupsSerializers(group, many=True).data
         return Response(data)
 
