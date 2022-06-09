@@ -1,4 +1,5 @@
-import random, string
+from io import BytesIO
+import random, string, sys
 from datetime import timedelta
 from django.db import models
 from django.dispatch import receiver
@@ -6,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from unixtimestampfield.fields import UnixTimeStampField
 import uuid
@@ -55,6 +57,27 @@ class ImageFiles(models.Model):
     
     def type(self):
         return "image"
+    
+    def make_thumbnail(self):
+        try:
+            img = Image.open(self.file)
+            output_size = (300, 169)
+
+            output = BytesIO()
+
+            img.thumbnail(output_size)
+            img.save(output, format='JPEG', quality=90)
+
+            self.thumbnail = InMemoryUploadedFile(
+                            output, 
+                            'ImageField',  
+                            "%s.jpg" % self.file.name.split('.')[0],
+                            'image/jpeg',
+                            sys.getsizeof(output), None
+                            )
+            self.save()
+        except:
+            pass
 
 class VideoFiles(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -136,6 +159,7 @@ class UniqueURL(models.Model):
 def auto_delete_image_on_delete(sender, instance, **kwargs):
     try:
         instance.file.delete(save=False)
+        instance.thumbnail.delete(save=False)
     except:
         pass
 
@@ -146,6 +170,7 @@ def auto_delete_image_on_change(sender, instance, **kwargs):
         new_file = instance.file
         if not old_file == new_file:
             old_file.delete(save=False)
+            ImageFiles.objects.get(id=instance.id).thumbnail.delete(save=False)
     except:
         pass
 

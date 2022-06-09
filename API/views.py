@@ -84,6 +84,7 @@ def image_api(request):
                 image.latitude = latitude
                 image.longitude = longitude
             image.save()
+            image.make_thumbnail()
             if group_id != '':
                 group = get_object_or_404(FileGroups, id=group_id)
                 group.image_files.add(image)
@@ -238,6 +239,7 @@ def image_edit(request, id):
         if name != '':
             image.name = name
         if view_permission != '':
+            image.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 image.view_permission.add(usr)
@@ -267,6 +269,7 @@ def video_edit(request, id):
         if name != '':
             video.name = name
         if view_permission != '':
+            video.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 video.view_permission.add(usr)
@@ -298,14 +301,17 @@ def group_edit(request, id):
         if name != '':
             group.name = name
         if images != '':
+            group.image_files.clear()
             for id in images:
                 img = get_object_or_404(ImageFiles, id=id)
                 group.image_files.add(img)
         if videos != '':
+            group.video_files.clear()
             for id in videos:
                 vid = get_object_or_404(VideoFiles, id=id)
                 group.video_files.add(vid)
         if view_permission != '':
+            group.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 group.view_permission.add(usr)
