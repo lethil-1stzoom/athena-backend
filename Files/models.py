@@ -1,9 +1,11 @@
 import random, string
 from datetime import timedelta
 from django.db import models
+from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from PIL import Image
 
 from unixtimestampfield.fields import UnixTimeStampField
 import uuid
@@ -15,10 +17,13 @@ User = get_user_model()
 def image_path(instance, filename):
     return 'file/image/{0}/{1}'.format(instance.id, filename)
 
+def image_thumbnail_path(instance, filename):
+    return 'file/image/{0}/thumbnail/{1}'.format(instance.id, filename)
+
 def video_path(instance, filename):
     return 'file/video/{0}/{1}'.format(instance.id, filename)
 
-def thumbnail_path(instance, filename):
+def video_thumbnail_path(instance, filename):
     return 'file/video/{0}/thumbnail/{1}'.format(instance.id, filename)
 
 
@@ -38,6 +43,7 @@ class ImageFiles(models.Model):
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
+    thumbnail = models.ImageField(upload_to=video_thumbnail_path, blank=True, null=True)
     upload_by = models.CharField(max_length=255)
     view_permission = models.ManyToManyField(User, blank=True)
 
@@ -56,11 +62,11 @@ class VideoFiles(models.Model):
     created_at_numeric = UnixTimeStampField(use_numeric=True, default=timezone.now)
     description = models.CharField(max_length=255, blank=True, null=True)
     file = models.FileField(upload_to=video_path)
-    thumbnail = models.ImageField(upload_to=thumbnail_path, blank=True, null=True)
     latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
+    thumbnail = models.ImageField(upload_to=video_thumbnail_path, blank=True, null=True)
     upload_by = models.CharField(max_length=255)
     view_permission = models.ManyToManyField(User, blank=True)
 
@@ -124,3 +130,39 @@ class UniqueURL(models.Model):
         self.delete()
         return False
     
+
+
+@receiver(models.signals.post_delete, sender=ImageFiles)
+def auto_delete_image_on_delete(sender, instance, **kwargs):
+    try:
+        instance.file.delete(save=False)
+    except:
+        pass
+
+@receiver(models.signals.pre_save, sender=ImageFiles)
+def auto_delete_image_on_change(sender, instance, **kwargs):
+    try:
+        old_file = ImageFiles.objects.get(id=instance.id).file
+        new_file = instance.file
+        if not old_file == new_file:
+            old_file.delete(save=False)
+    except:
+        pass
+
+@receiver(models.signals.post_delete, sender=VideoFiles)
+def auto_delete_image_on_delete(sender, instance, **kwargs):
+    try:
+        instance.file.delete(save=False)
+    except:
+        pass
+
+@receiver(models.signals.pre_save, sender=VideoFiles)
+def auto_delete_image_on_change(sender, instance, **kwargs):
+    try:
+        old_file = VideoFiles.objects.get(id=instance.id).file
+        new_file = instance.file
+        if not old_file == new_file:
+            old_file.delete(save=False)
+    except:
+        pass
+
