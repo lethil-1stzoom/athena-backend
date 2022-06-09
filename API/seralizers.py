@@ -35,7 +35,7 @@ class VideoFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'image', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail']
 
 
 
