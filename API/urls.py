@@ -9,6 +9,7 @@ urlpatterns = [
     path('image/', image_api),
     path('video/', video_api),
     path('group/', group_api),
+    path('all/files/', all_files),
     path('image/<uuid:id>/', image_edit),
     path('video/<uuid:id>/', video_edit),
     path('group/<uuid:id>/', group_edit),

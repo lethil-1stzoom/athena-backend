@@ -200,6 +200,22 @@ def group_api(request):
         else:
             return Response({"status": "Not Authorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def all_files(request):
+    user = request.user
+    if request.method == 'GET':
+        image = user.imagefiles_set.all()
+        video = user.videofiles_set.all()
+        group = user.filegroups_set.all()
+        data = {}
+        data["image"] = ImageFilesSerializers(image, many=True).data
+        data["video"] = VideoFilesSerializers(video, many=True).data
+        data["group"] = FileGroupsSerializers(group, many=True).data
+        return Response(data)
+
 @api_view(['PATCH', 'DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
