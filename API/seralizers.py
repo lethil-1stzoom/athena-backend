@@ -24,7 +24,7 @@ class ImageFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'type']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail', 'type']
 
 class VideoFilesSerializers(serializers.ModelSerializer):
     thumbnail = serializers.ImageField(
@@ -63,7 +63,7 @@ class BossImageFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'type', 'view_permission', 'in_group']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail', 'type', 'view_permission', 'in_group']
 
 class BossVideoFilesSerializers(serializers.ModelSerializer):
     view_permission = UserSerializer(many=True, read_only=True)
