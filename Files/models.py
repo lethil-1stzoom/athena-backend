@@ -46,6 +46,9 @@ class ImageFiles(models.Model):
     
     def in_group(self):
         return self.groups.all()
+    
+    def type(self):
+        return "image"
 
 class VideoFiles(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -66,6 +69,9 @@ class VideoFiles(models.Model):
     
     def in_group(self):
         return self.groups.all()
+    
+    def type(self):
+        return "video"
 
 
 
@@ -83,6 +89,9 @@ class FileGroups(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def type(self):
+        return "group"
 
 
 class UniqueURL(models.Model):

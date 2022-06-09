@@ -211,10 +211,6 @@ def all_files(request):
         video = user.videofiles_set.all()
         image_data = ImageFilesSerializers(image, many=True).data
         video_data = VideoFilesSerializers(video, many=True).data
-        for x in image_data:
-            x.update({'type': 'image'})
-        for x in video_data:
-            x.update({'type': 'video'})
         vid_img_data = image_data + video_data
         vid_img_data.sort(key=lambda x: x['created_at'], reverse=True)
         group = user.filegroups_set.all()

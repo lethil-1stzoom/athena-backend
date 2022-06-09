@@ -24,7 +24,7 @@ class ImageFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'type']
 
 class VideoFilesSerializers(serializers.ModelSerializer):
     thumbnail = serializers.ImageField(
@@ -35,7 +35,7 @@ class VideoFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail', 'type']
 
 
 
@@ -46,7 +46,7 @@ class FileGroupsSerializers(serializers.ModelSerializer):
     view_permission = UserSerializer(many=True, read_only=True)
     class Meta:
         model = FileGroups
-        fields = ['id', 'created_at', 'created_by', 'description', 'image_files', 'video_files', 'name', 'view_permission']
+        fields = ['id', 'created_at', 'created_by', 'description', 'image_files', 'video_files', 'name', 'type', 'view_permission']
 
 
 class BossFileGroupSerializers(serializers.ModelSerializer):
@@ -63,7 +63,7 @@ class BossImageFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = ImageFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'view_permission', 'in_group']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'type', 'view_permission', 'in_group']
 
 class BossVideoFilesSerializers(serializers.ModelSerializer):
     view_permission = UserSerializer(many=True, read_only=True)
@@ -76,7 +76,7 @@ class BossVideoFilesSerializers(serializers.ModelSerializer):
     )
     class Meta:
         model = VideoFiles
-        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'thumbnail', 'view_permission', 'in_group']
+        fields = ['id', 'created_at', 'description', 'latitude', 'longitude', 'name', 'upload_by', 'file', 'type', 'thumbnail', 'view_permission', 'in_group']
 
 class UniqueUrlSerializers(serializers.ModelSerializer):
     class Meta:
