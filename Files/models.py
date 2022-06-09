@@ -43,7 +43,7 @@ class ImageFiles(models.Model):
     longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
     name = models.CharField(max_length=255)
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True)
-    thumbnail = models.ImageField(upload_to=video_thumbnail_path, blank=True, null=True)
+    thumbnail = models.ImageField(upload_to=image_thumbnail_path, blank=True, null=True)
     upload_by = models.CharField(max_length=255)
     view_permission = models.ManyToManyField(User, blank=True)
 
