@@ -306,3 +306,34 @@
     Method: GET // Accessible to anyone
     Data:
         Object of the file or group shared,
+
+13)
+    Endpoint: http://20.118.129.118/api/v0/all/files/
+    Method: GET
+    Data:
+        {
+            "image": [
+                {
+                    "id": "d25a5b7f-3565-415c-8b0b-79541b3dcb51",
+                    "created_at": "2022-06-06T09:17:14.595090Z",
+                    "description": null,
+                    "latitude": null,
+                    "longitude": null,
+                    "name": "Abstract Image",
+                    "upload_by": "test@email.com",
+                    "file": "/media/file/image/d25a5b7f-3565-415c-8b0b-79541b3dcb51/img.jpeg"
+                },
+                {
+                    "id": "d02f2d16-6944-4124-8e25-2e36a06d8d86",
+                    "created_at": "2022-06-06T06:35:42.604105Z",
+                    "description": "This is description",
+                    "latitude": "13344.0500600000000000",
+                    "longitude": "345454.4505400000000000",
+                    "name": "Testing",
+                    "upload_by": "staff1@email.com",
+                    "file": "/media/file/image/d02f2d16-6944-4124-8e25-2e36a06d8d86/img.jpeg"
+                }
+            ],
+            "video": [],
+            "group": []
+        }

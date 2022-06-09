@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'storages',
+    'dbbackup',
 
     'API',
     'Files',
@@ -177,6 +178,14 @@ if not DEBUG:
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 
+if not DEBUG:
+    AZURE_ACCOUNT_NAME = 'hpstore01'
+    AZURE_CREDENTIAL = 'GWvoTbx15MerKCFEY1AskqoGh+gON75ImyH7DokraXoit6ND2oq+cgErZuosuVD6+qLamjo4UrEzZXVmksNq2w=='
+    AZURE_CONTAINER = 'media'
+    AZURE_BACKUP_FOLDER_NAME = 'AthenaDB'
+else:
+    DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
