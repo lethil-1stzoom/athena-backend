@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import environ
+import environ, os
+import firebase_admin
+from firebase_admin import credentials
 
 env = environ.Env()
 environ.Env.read_env()
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'storages',
     'dbbackup',
+    "fcm_django",
 
     'API',
     'Files',
@@ -191,6 +194,10 @@ DBBACKUP_STORAGE_OPTIONS = {
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+cred = credentials.Certificate(os.path.join(BASE_DIR, 'Athena/firebase_key.json'))
+firebase_admin.initialize_app(cred)
 
 
 if not DEBUG:

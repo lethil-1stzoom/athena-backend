@@ -1,8 +1,9 @@
 .env
-api_docs.txt
 db.sqlite3
 media
 .env/
 **/migrations/**
 **/__pycache__/**
 **/custom_azure.py
+**/firebase_key.json
+api_docs.txt

@@ -3,8 +3,8 @@ import uuid
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
-from unixtimestampfield.fields import UnixTimeStampField
+from fcm_django.models import FCMDevice
+from firebase_admin.messaging import Message, Notification
 
 
 class CustomUserManager(BaseUserManager):
@@ -52,6 +52,7 @@ class CustomUser(AbstractUser):
 	email = models.EmailField(_('email address'), unique=True)
 	is_exec = models.BooleanField(default=False)
 	organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True, related_name="users")
+	fcmDevice = models.ManyToManyField(FCMDevice, blank=True)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []
@@ -63,5 +64,24 @@ class CustomUser(AbstractUser):
 	
 	def name(self):
 		return self.first_name
+	
+	def edit_fcmDevice(self, token):
+		if not self.fcmDevice.filter(registration_id=token).exists():
+			fcmDevice = FCMDevice.objects.create(
+				registration_id=token,
+				type='android'
+				)
+			fcmDevice.save()
+			self.fcmDevice.add(fcmDevice)
+			self.save()
+	
+	def fcmRemove(self, token):
+		if self.fcmDevice.filter(registration_id=token).exists():
+			token = self.fcmDevice.get(registration_id=token)
+			token.delete()
+			
+	def send_notification(self, title, body, data = {}):
+		for fcm in self.fcmDevice.all():
+			fcm.send_message(Message(notification=Notification(title=title, body=body), data=data))
 
 

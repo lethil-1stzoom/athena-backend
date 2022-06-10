@@ -25,6 +25,7 @@ def login(request):
             data = request.data
         email = data.get('email', '')
         password = data.get('password', '')
+        fcm_token = data.get('fcm_token', '')
         user = authenticate(email=email, password=password)
         if user is not None and not user.is_staff:
             token, created = Token.objects.get_or_create(user=user)
@@ -32,6 +33,8 @@ def login(request):
             user['token'] = token.key
             response = Response({"user": user})
             response.set_cookie(key='token', value=token.key)
+            if fcm_token != '':
+                user.edit_fcmDevice(fcm_token)
             return response
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -135,6 +138,7 @@ def video_api(request):
                 video.latitude = latitude
                 video.longitude = longitude
             video.save()
+            video.make_thumbnail()
             if group_id != '':
                 group = get_object_or_404(FileGroups, id=group_id)
                 group.video_files.add(video)
@@ -193,6 +197,10 @@ def group_api(request):
                         usr = get_object_or_404(User, id=id)
                         if not usr.is_exec:
                             group.view_permission.add(usr)
+                            title = "New Group Shared"
+                            body = "A new group / project has been shared to you."
+                            message_data = {"user": usr.email, "group": group.id  }
+                            usr.send_notification(title, body, message_data)
                 group.save()
                 data = FileGroupsSerializers(group).data
                 return Response(data)
@@ -253,6 +261,10 @@ def image_edit(request, id):
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 image.view_permission.add(usr)
+                title = "New Image Shared"
+                body = "A new image has been shared to you."
+                message_data = {"user": usr.email, "image": image.id  }
+                usr.send_notification(title, body, message_data)
         image.save()
         data = BossImageFilesSerializers(image).data
         return Response(data)
@@ -283,6 +295,10 @@ def video_edit(request, id):
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 video.view_permission.add(usr)
+                title = "New Video Shared"
+                body = "A new video has been shared to you."
+                message_data = {"user": usr.email, "video": video.id  }
+                usr.send_notification(title, body, message_data)
         video.save()
         data = BossVideoFilesSerializers(video).data
         return Response(data)
