@@ -239,7 +239,7 @@
         }
 
 10)
-    Endpoint: http://20.118.129.118/api/v0/edit/share/
+    Endpoint: http://20.118.129.118/api/v0/share/
     Method: GET, POST // Only for is_exec user
     Data:
         expired_hrs-int[optional, default=24]
@@ -293,7 +293,7 @@
         }
 
 11)
-    Endpoint: http://20.118.129.118/api/v0/edit/share/<uuid:id>/
+    Endpoint: http://20.118.129.118/api/v0/share/<uuid:id>/
     Method: DELETE, PATCH // Only for is_exec user
     Data:
         expired_hrs-int

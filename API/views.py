@@ -441,6 +441,7 @@ def share(request):
             url.save()
             data = UniqueUrlSerializers(url).data
             return Response(data)
+        return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 @api_view(['DELETE', 'PATCH'])
 @authentication_classes([TokenAuthentication])
@@ -469,12 +470,20 @@ def share_edit(request, id):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes((permissions.AllowAny, ))
-def get_from_share(requesr, token):
+def get_from_share(request, token):
     url = get_object_or_404(UniqueURL, token=token)
     if url.is_valid():
         data = get_object_by_type(url)
+        data_url = []
+        if data['type'] == 'group':
+            for l in data['image_files']:
+                data_url.append(l['file'])
+            for l in data['video_files']:
+                data_url.append(l['file'])
+        else:
+            data_url.append(data['file'])
         url.visited += 1
         url.save()
-        return Response(data)
+        return Response(data_url)
     return Response({"message": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
             
