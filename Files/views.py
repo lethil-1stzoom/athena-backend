@@ -4,6 +4,7 @@ from Files.models import FileGroups, ImageFiles, UniqueURL, VideoFiles
 
 def get_from_share(request, token):
     url = get_object_or_404(UniqueURL, token=token)
+    context = {}
     if url.is_valid():
         if url.type == "image":
             data = get_object_or_404(ImageFiles, id=url.obj_id)
