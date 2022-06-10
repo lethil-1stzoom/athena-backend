@@ -217,7 +217,17 @@ def all_files(request):
         group = user.filegroups_set.all()
         data = {}
         data['files'] = vid_img_data
-        data["group"] = FileGroupsSerializers(group, many=True).data
+        group_data = FileGroupsSerializers(group, many=True).data
+        for group in group_data:
+            all_files = []
+            for files in group['image_files']:
+                all_files.append(files)
+            for files in group['video_files']:
+                all_files.append(files)        
+            all_files.sort(key=lambda x: x['created_at'], reverse=True)
+            group['all_files'] = all_files
+        data['group'] = group_data
+
         return Response(data)
 
 @api_view(['PATCH', 'DELETE'])
