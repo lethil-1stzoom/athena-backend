@@ -33,7 +33,7 @@
 .item p{
     padding: 0px 5px;
 }
-.item image, .item video{
+.item img, .item video{
     width: 100%;
     max-height: 50vh;
 }
@@ -43,7 +43,7 @@
     border-radius: 5px;
     box-shadow: 3px 3px 20px grey;
 }
-.single-item image, .single-item video{
+.single-item img, .single-item video{
     width: 100%;
 }
 
