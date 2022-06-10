@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="main">
+    {% if data %}
+        {% if type == 'group' %}
+            <div class="container">
+                {% for image in data.image_files.all %}
+                <div class="item">
+                    <img src="{{ image.file }}" alt="{{ image.name }}">
+                    <div class="feature">
+                        <p>{{ image.name }}</p>
+                        <a href="{{ image.file }}" title="download" class="btn">Download</a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% for video in data.video_files.all %}
+                <div class="item">
+                    <video controls>
+                        <source src="{{ video.file }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="feature">
+                        <p>{{ video.name }}</p>
+                        <a href="{{ video.file }}" title="download" class="btn">Download</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            {% if type == 'video' %}
+                <div class="single-item">
+                    <video controls>
+                        <source src="{{ data.file }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="feature">
+                        <p>{{ data.name }}</p>
+                        <a href="{{ data.file }}" title="download" class="btn">Download</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="single-item">
+                    <img src="{{ data.file }}" alt="{{ image.name }}">
+                    <div class="feature">
+                        <p>{{ data.name }}</p>
+                        <a href="{{ data.file }}" title="download" class="btn">Download</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h1 class="title">No image here</h1>
+    {% endif %}
+</div>
+{% endblock %}

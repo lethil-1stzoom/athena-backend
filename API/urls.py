@@ -6,6 +6,7 @@ urlpatterns = [
     path('auth/', include('rest_framework.urls')),
     path('login/', login),
     path('validate/', validate),
+    path('logout/', logout),
     path('image/', image_api),
     path('video/', video_api),
     path('group/', group_api),
@@ -18,5 +19,4 @@ urlpatterns = [
     path('edit/user/', edit_info),
     path('share/', share),
     path('share/<uuid:id>/', share_edit),
-    path('temp/file/<str:token>/', get_from_share),
     ]

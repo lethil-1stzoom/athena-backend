@@ -49,6 +49,21 @@ def validate(request):
         data['validated'] = True
         return Response(data)
 
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    user = request.user
+    if request.method == 'POST':
+        if isinstance(request.data, str):
+            data = json.loads(request.data)
+        else:
+            data = request.data
+        fcm_token = data.get('fcm_token', '')
+        user.fcmRemove(fcm_token)
+        return Response({"message": "fcm_token removed"})
+    return Response({"message": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET', 'POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -138,7 +153,6 @@ def video_api(request):
                 video.latitude = latitude
                 video.longitude = longitude
             video.save()
-            video.make_thumbnail()
             if group_id != '':
                 group = get_object_or_404(FileGroups, id=group_id)
                 group.video_files.add(video)
@@ -493,23 +507,5 @@ def share_edit(request, id):
         url.delete()
         return Response({"message": "Deleted Successfully"})
 
-@api_view(['GET'])
-@authentication_classes([])
-@permission_classes((permissions.AllowAny, ))
-def get_from_share(request, token):
-    url = get_object_or_404(UniqueURL, token=token)
-    if url.is_valid():
-        data = get_object_by_type(url)
-        data_url = []
-        if data['type'] == 'group':
-            for l in data['image_files']:
-                data_url.append(l['file'])
-            for l in data['video_files']:
-                data_url.append(l['file'])
-        else:
-            data_url.append(data['file'])
-        url.visited += 1
-        url.save()
-        return Response(data_url)
-    return Response({"message": "Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
             
