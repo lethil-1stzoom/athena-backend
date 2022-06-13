@@ -29,12 +29,12 @@ def login(request):
         user = authenticate(email=email, password=password)
         if user is not None and not user.is_staff:
             token, created = Token.objects.get_or_create(user=user)
+            if fcm_token != '':
+                user.edit_fcmDevice(fcm_token)
             user = UserSerializer(user).data
             user['token'] = token.key
             response = Response({"user": user})
             response.set_cookie(key='token', value=token.key)
-            if fcm_token != '':
-                user.edit_fcmDevice(fcm_token)
             return response
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
