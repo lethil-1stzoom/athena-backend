@@ -213,7 +213,7 @@ def group_api(request):
                             group.view_permission.add(usr)
                             title = "New Group Shared"
                             body = "A new group / project has been shared to you."
-                            message_data = {"user": usr.email, "group": group.id  }
+                            message_data = {"user": str(usr.email), "group": str(group.id ) }
                             usr.send_notification(title, body, message_data)
                 group.save()
                 data = FileGroupsSerializers(group).data
@@ -277,7 +277,7 @@ def image_edit(request, id):
                 image.view_permission.add(usr)
                 title = "New Image Shared"
                 body = "A new image has been shared to you."
-                message_data = {"user": usr.email, "image": image.id  }
+                message_data = {"user": str(usr.email), "image": str(image.id)  }
                 usr.send_notification(title, body, message_data)
         image.save()
         data = BossImageFilesSerializers(image).data
@@ -311,7 +311,7 @@ def video_edit(request, id):
                 video.view_permission.add(usr)
                 title = "New Video Shared"
                 body = "A new video has been shared to you."
-                message_data = {"user": usr.email, "video": video.id  }
+                message_data = {"user": str(usr.email), "video": str(video.id) }
                 usr.send_notification(title, body, message_data)
         video.save()
         data = BossVideoFilesSerializers(video).data
@@ -351,10 +351,16 @@ def group_edit(request, id):
                 vid = get_object_or_404(VideoFiles, id=id)
                 group.video_files.add(vid)
         if view_permission != '':
+            old_user = group.view_permission.all()
             group.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 group.view_permission.add(usr)
+                title = "New Group Shared"
+                body = "A new group / project has been shared to you."
+                message_data = {"user": str(usr.email), "group": str(group.id ) }
+                usr.send_notification(title, body, message_data)
+                usr.send_notification(title, body, message_data)
         group.save()
         data = FileGroupsSerializers(group).data
         return Response(data)
