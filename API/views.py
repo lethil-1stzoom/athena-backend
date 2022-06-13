@@ -140,6 +140,7 @@ def video_api(request):
         latitude = data.get('latitude', '')
         longitude = data.get('longitude', '')
         group_id = data.get('group', '')
+        thumbnail = data.get('thumbnail', '')
         if name != '' and file != '':
             video = VideoFiles.objects.create(
                 name=name,
@@ -152,6 +153,8 @@ def video_api(request):
             if latitude != '' and longitude != '':
                 video.latitude = latitude
                 video.longitude = longitude
+            if thumbnail != '':
+                video.thumbnail = thumbnail
             video.save()
             if group_id != '':
                 group = get_object_or_404(FileGroups, id=group_id)
