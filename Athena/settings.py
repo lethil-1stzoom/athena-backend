@@ -168,7 +168,7 @@ USE_TZ = True
 
 STATIC_URL = '/webstatic/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = 'staticfiles/static'
+STATIC_ROOT = 'staticfiles/webstatic'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT =  BASE_DIR / "media"
