@@ -7,7 +7,11 @@
             <div class="container">
                 {% for image in data.image_files %}
                 <div class="item">
-                    <img src="{{ image.file }}" alt="This image might not be supported by your browser">
+                    {% if image.thumbnail %}
+                        <img src="{{ image.thumbnail }}" alt="This image might not be supported by your browser">
+                    {% else %}
+                        <img src="{{ image.file }}" alt="This image might not be supported by your browser">
+                    {% endif %}
                     <div class="feature">
                         <p>{{ image.name }}</p>
                         <a href="{{ image.file }}" title="download" class="btn">Download</a>
