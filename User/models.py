@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message, Notification
 
+from User.emails import send_email
+
 
 class CustomUserManager(BaseUserManager):
 	def create_user(self, email, password, **extra_fields):
@@ -53,6 +55,7 @@ class CustomUser(AbstractUser):
 	is_exec = models.BooleanField(default=False)
 	organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True, related_name="users")
 	fcmDevice = models.ManyToManyField(FCMDevice, blank=True)
+	notify = models.BooleanField(default=False)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []
@@ -83,5 +86,13 @@ class CustomUser(AbstractUser):
 	def send_notification(self, title, body, data = {}):
 		for fcm in self.fcmDevice.all():
 			fcm.send_message(Message(notification=Notification(title=title, body=body), data=data))
+	
+	def send_notification_email(self, by, subject):
+		if self.notify == True and self.is_exec == True:
+			email = self.email
+			name = self.first_name
+			return send_email(email, name, subject, by)
+		else:
+			pass
 
 

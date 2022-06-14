@@ -112,6 +112,9 @@ def image_api(request):
                 data = ImageFilesSerializers(image).data
             else:
                 data = BossImageFilesSerializers(image).data
+            for users in User.objects.exclude(is_staff=False):
+                subject = "New image upload notification"
+                users.send_notification_email(user.email, subject)
             return Response(data)
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -165,6 +168,9 @@ def video_api(request):
                 data = VideoFilesSerializers(video).data
             else:
                 data = BossVideoFilesSerializers(video).data
+            for users in User.objects.exclude(is_staff=False):
+                subject = "New video upload notification"
+                users.send_notification_email(user.email, subject)
             return Response(data)
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
