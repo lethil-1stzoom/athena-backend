@@ -34,7 +34,7 @@ if env('DEBUG') == 'True':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '20.118.129.118', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '20.118.129.118', '127.0.0.1', 'athena.1stzoom.com']
 
 
 # Application definition
@@ -76,6 +76,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://20.118.129.118",
     "http://localhost:80",
     "http://localhost:8000",
+    'https://athena.1stzoom.com',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
