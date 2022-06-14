@@ -441,7 +441,7 @@ def edit_info(request):
         email = data.get('email', '')
         first_name = data.get('name', '')
         is_exec = data.get('is_exec', '')
-
+        notify = data.get('notify', '')
         user = authenticate(email=email, password=password)
         if user is not None:
             if password1 != '' and password1 == password2:
@@ -450,7 +450,13 @@ def edit_info(request):
                 user.first_name = first_name
             if is_exec != '':
                 user.is_exec = is_exec
+            if user.is_exec == True:
+                if notify != '':
+                    user.notify = notify
             user.save()
+            data = UserSerializer(user).data
+            return Response(data)
+        return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
     if request.method == 'DELETE':
         user.delete()

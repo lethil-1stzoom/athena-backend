@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
     organisation = OrganisationSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'is_exec', 'organisation', 'created_at']
+        fields = ['id', 'email', 'name', 'is_exec', 'notify', 'organisation', 'created_at']
 
 class ImageFilesSerializers(serializers.ModelSerializer):
     file = serializers.ImageField(
