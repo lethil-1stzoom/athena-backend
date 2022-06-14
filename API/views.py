@@ -112,7 +112,7 @@ def image_api(request):
                 data = ImageFilesSerializers(image).data
             else:
                 data = BossImageFilesSerializers(image).data
-            for users in User.objects.exclude(is_staff=False):
+            for users in organisation.users.all():
                 subject = "New image upload notification"
                 users.send_notification_email(user.email, subject)
             return Response(data)
@@ -168,7 +168,7 @@ def video_api(request):
                 data = VideoFilesSerializers(video).data
             else:
                 data = BossVideoFilesSerializers(video).data
-            for users in User.objects.exclude(is_staff=False):
+            for users in organisation.users.all():
                 subject = "New video upload notification"
                 users.send_notification_email(user.email, subject)
             return Response(data)
