@@ -360,17 +360,17 @@ def group_edit(request, id):
                 vid = get_object_or_404(VideoFiles, id=id)
                 group.video_files.add(vid)
         if view_permission != '':
-            old_user = group.view_permission.all()
             group.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 group.view_permission.add(usr)
+        group.save()
+        if images != '' or videos != '' or view_permission != '':
+            for usr in group.view_permission.all():
                 title = "New Group Shared"
                 body = "A new group / project has been shared to you."
                 message_data = {"user": str(usr.email), "group": str(group.id ) }
                 usr.send_notification(title, body, message_data)
-                usr.send_notification(title, body, message_data)
-        group.save()
         data = FileGroupsSerializers(group).data
         return Response(data)
     if request.method == 'DELETE':
