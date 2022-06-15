@@ -95,11 +95,8 @@ class CustomUser(AbstractUser):
 		else:
 			pass
 	def send_welcome_email(self, by, subject, psw):
-		if self.notify == True and self.is_exec == True:
-			email = self.email
-			name = self.first_name
-			return send_email(email, name, subject, by, psw)
-		else:
-			pass
+		email = self.email
+		name = self.first_name
+		return send_email(email, name, subject, by, psw)
 
 
