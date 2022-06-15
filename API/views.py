@@ -339,6 +339,7 @@ def video_edit(request, id):
 @is_exec
 def group_edit(request, id):
     group = get_object_or_404(FileGroups, id=id)
+    temp_user = group.view_permission.all()
     if request.method == 'PATCH':
         if isinstance(request.data, str):
             data = json.loads(request.data)
@@ -364,7 +365,6 @@ def group_edit(request, id):
                 vid = get_object_or_404(VideoFiles, id=id)
                 group.video_files.add(vid)
         if view_permission != '':
-            temp_user = group.view_permission.all()
             group.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
