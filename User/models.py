@@ -55,7 +55,7 @@ class CustomUser(AbstractUser):
 	is_exec = models.BooleanField(default=False)
 	organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, blank=True, null=True, related_name="users")
 	fcmDevice = models.ManyToManyField(FCMDevice, blank=True)
-	notify = models.BooleanField(default=False)
+	notify = models.BooleanField(default=True)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []
