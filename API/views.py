@@ -372,13 +372,15 @@ def group_edit(request, id):
         group.save()
         if images != '' or videos != '' or view_permission != '':
             for usr in group.view_permission.all():
-                title = f"Group: {group.name}"
-                body = "The group is being edited"
+                title = "New files shared"
+                body = f"A new fiel is shared in {group.name}"
+                message_data = {"user": str(usr.email), "group": str(group.id ) }
                 if usr not in temp_user:
                     title = "New Group Shared"
                     body = "A new group / project has been shared to you."
-                message_data = {"user": str(usr.email), "group": str(group.id ) }
-                usr.send_notification(title, body, message_data)
+                    usr.send_notification(title, body, message_data)
+                elif images != '' or videos != '':
+                    usr.send_notification(title, body, message_data)
         data = FileGroupsSerializers(group).data
         return Response(data)
     if request.method == 'DELETE':
@@ -391,10 +393,10 @@ def group_edit(request, id):
 @permission_classes([IsAuthenticated])
 @is_exec
 def users(request):
-    user = request.user
-    organisation = user.organisation
+    user_admin = request.user
+    organisation = user_admin.organisation
     if request.method == 'GET':
-        usr = organisation.users.exclude(email=user.email)
+        usr = organisation.users.exclude(email=user_admin.email)
         data = UserSerializer(usr, many=True).data
         return Response(data)
     
@@ -418,6 +420,7 @@ def users(request):
                 )
                 user.set_password(password1)
                 user.save()
+                user.send_welcome_email(user_admin.email, "Welcome to Athena", password1)
                 data = UserSerializer(user).data
                 return Response(data)
         return Response({"message": "Something went wrong"}, status=status.HTTP_406_NOT_ACCEPTABLE)
