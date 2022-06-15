@@ -280,14 +280,16 @@ def image_edit(request, id):
         if name != '':
             image.name = name
         if view_permission != '':
+            temp_user = image.view_permission.all()
             image.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 image.view_permission.add(usr)
-                title = "New Image Shared"
-                body = "A new image has been shared to you."
-                message_data = {"user": str(usr.email), "image": str(image.id)  }
-                usr.send_notification(title, body, message_data)
+                if usr not in temp_user:
+                    title = "New Image Shared"
+                    body = "A new image has been shared to you."
+                    message_data = {"user": str(usr.email), "image": str(image.id)  }
+                    usr.send_notification(title, body, message_data)
         image.save()
         data = BossImageFilesSerializers(image).data
         return Response(data)
@@ -314,14 +316,16 @@ def video_edit(request, id):
         if name != '':
             video.name = name
         if view_permission != '':
+            temp_user = video.view_permission.all()
             video.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
                 video.view_permission.add(usr)
-                title = "New Video Shared"
-                body = "A new video has been shared to you."
-                message_data = {"user": str(usr.email), "video": str(video.id) }
-                usr.send_notification(title, body, message_data)
+                if usr not in temp_user: 
+                    title = "New Video Shared"
+                    body = "A new video has been shared to you."
+                    message_data = {"user": str(usr.email), "video": str(video.id) }
+                    usr.send_notification(title, body, message_data)
         video.save()
         data = BossVideoFilesSerializers(video).data
         return Response(data)
@@ -360,6 +364,7 @@ def group_edit(request, id):
                 vid = get_object_or_404(VideoFiles, id=id)
                 group.video_files.add(vid)
         if view_permission != '':
+            temp_user = group.view_permission.all()
             group.view_permission.clear()
             for id in view_permission:
                 usr = get_object_or_404(User, id=id)
@@ -367,8 +372,11 @@ def group_edit(request, id):
         group.save()
         if images != '' or videos != '' or view_permission != '':
             for usr in group.view_permission.all():
-                title = "New Group Shared"
-                body = "A new group / project has been shared to you."
+                title = f"Group: {group.name}"
+                body = "The group is being edited"
+                if usr not in temp_user:
+                    title = "New Group Shared"
+                    body = "A new group / project has been shared to you."
                 message_data = {"user": str(usr.email), "group": str(group.id ) }
                 usr.send_notification(title, body, message_data)
         data = FileGroupsSerializers(group).data
