@@ -78,6 +78,11 @@ class ImageFiles(models.Model):
             self.save()
         except:
             pass
+    
+    def size(self):
+        x = self.file.size
+        value = round(x/1000, 2)
+        return value
 
 class VideoFiles(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -101,6 +106,12 @@ class VideoFiles(models.Model):
     
     def type(self):
         return "video"
+    
+
+    def size(self):
+        x = self.file.size
+        value = round(x/1000, 2)
+        return value
 
 
 

@@ -19,4 +19,5 @@ urlpatterns = [
     path('edit/user/', edit_info),
     path('share/', share),
     path('share/<uuid:id>/', share_edit),
+    path('analytics/', analytics)
     ]

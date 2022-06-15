@@ -1,4 +1,5 @@
 import json
+from urllib import response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.authentication import TokenAuthentication
@@ -540,4 +541,43 @@ def share_edit(request, id):
         return Response({"message": "Deleted Successfully"})
 
 
-            
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@is_exec
+def analytics(request):
+    user = request.user
+    organisation = user.organisation
+    if request.method == 'GET':
+        all_image = list(organisation.imagefiles_set.all())
+        all_video = list(organisation.videofiles_set.all())
+        all_files = all_image + all_video
+        total_size = {}
+        all_date = []
+        total_image_size = 0
+        total_video_size = 0
+        total_image = len(all_image)
+        total_video = len(all_video)
+        for img in all_image:
+            total_image_size += img.size()
+        for vid in all_video:
+            total_video_size += vid.size()
+        
+        for date in all_files:
+            if date.created_at.date() not in all_date:
+                all_date.append(date.created_at.date())
+        all_date.sort()
+        
+        for date in all_date:
+            total_size[str(date)] = 0
+            for file in all_files:
+                if date == file.created_at.date():
+                    total_size[str(date)] += file.size()
+        response = {
+            "total_image": total_image,
+            "total_video": total_video,
+            "total_image_size": total_image_size,
+            "total_video_size": total_video_size,
+            "total_size": total_size
+        }
+        return Response(response)
