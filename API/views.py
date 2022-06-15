@@ -573,6 +573,9 @@ def analytics(request):
             for file in all_files:
                 if date == file.created_at.date():
                     total_size[str(date)] += file.size()
+        print(total_size)
+        for i in range(1, len(all_date)):
+            total_size[str(all_date[i])] += total_size[str(all_date[i-1])]
         response = {
             "total_image": total_image,
             "total_video": total_video,
